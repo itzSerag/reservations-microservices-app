@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ReservationsModule } from './reservations.module';
+import * as dotenv from "dotenv"
+dotenv.config()
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
-  await app.listen(process.env.port ?? 3000);
+  await app.listen(process.env.port || 3000);
 }
 bootstrap();

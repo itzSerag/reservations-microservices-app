@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 
 
 @Module({
@@ -15,10 +15,10 @@ import { MongooseModule } from '@nestjs/mongoose';
     // This way, the connection string can be configured in the .env file.
     // The ConfigService is injected into the useFactory function, which reads the MONGO_URI variable from the environment.
     // and determines the connection string dynamically.
-    imports:[MongooseModule.forRootAsync({
+    imports: [MongooseModule.forRootAsync({
 
         imports: [ConfigModule],
-        useFactory: (configService : ConfigService) => ({ 
+        useFactory: (configService: ConfigService) => ({
             uri: configService.get('MONGO_URI')
         }),
 
@@ -26,6 +26,12 @@ import { MongooseModule } from '@nestjs/mongoose';
         // u must import the ConfigModule into the module where the MongooseModule.forRootAsync() method is called.
         inject: [ConfigService]
     })
-    ]
+    ],
 })
-export class DatabaseModule {}
+export class DatabaseModule {
+    // in this wau we wont use mongoose we will use Database only,, even other modules, apps
+    // wont know that we are using mongoose --> we just using DATABASE got it ?
+    static forFeature(models: ModelDefinition[]) {
+        return MongooseModule.forFeature(models)
+    }
+}

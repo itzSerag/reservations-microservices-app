@@ -25,7 +25,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         // that lean is for i dont want anything additional form MongoDB 
         //i just want what iam seraching for --> lean(true)
 
-        const thatDocument = await this.model.findOne(filterQuery).lean(true)
+        const thatDocument = await this.model.findOne(filterQuery).lean<TDocument>(true)
 
         if (!thatDocument) {
             this.logger.warn('Document was not fond with this query')
@@ -42,7 +42,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
         // give us the doc after it has been updated and unhydrated
         const updatedDocument = await this.model.findOneAndUpdate(filterQuery, update, {
             new: true
-        }).lean(true)
+        }).lean<TDocument>(true)
 
         if (!updatedDocument) {
             this.logger.warn('Document was not fond with this query')
@@ -53,6 +53,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
 
     }
 
+    // find multiple records
     async find(filterQuery: FilterQuery<TDocument>): Promise<TDocument[]> {
         return await this.model.find(filterQuery).lean<TDocument[]>(true)
     }
