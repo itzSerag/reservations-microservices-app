@@ -19,7 +19,7 @@ import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
 
         imports: [ConfigModule],
         useFactory: (configService: ConfigService) => ({
-            uri: configService.get('MONGO_URI')
+            uri: configService.getOrThrow('MONGO_URI')
         }),
 
         // if u inject the ConfigService into the useFactory function,

@@ -1,0 +1,25 @@
+services:
+  reservations:
+    build: 
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+      # Overriding CMD command
+      target: development
+
+    #Hot Reloading :dev -- > reservations app
+    command:  pnpm run start:dev reservations
+
+    ports:
+      - '3000:3000'
+    
+    # volums is sharing space between containers to uses
+    # removing the container --> removing the space
+
+    volumes:
+      - .:/user/src/app
+    
+    # I gurss we dont need it if we already have a mongo uri
+  mongo:
+    image: mongo
+
+    

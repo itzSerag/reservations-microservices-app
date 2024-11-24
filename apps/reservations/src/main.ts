@@ -3,12 +3,18 @@ import { ReservationsModule } from './reservations.module';
 import * as dotenv from "dotenv"
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
+import { log } from 'console';
 dotenv.config()
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
 
-  app.useGlobalPipes(new ValidationPipe())
+  log(process.env.TZ[0])
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true
+  }))
 
   app.useLogger(app.get(Logger))
 
